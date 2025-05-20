@@ -1,0 +1,52 @@
+cmake_minimum_required(VERSION 3.20)
+project(hello C)
+
+# Add the executable with common source files
+add_executable(hello src/main.c src/module1/module1.c)
+
+# Non ho capito perché CMAKE_BUILD_TYPE va definito in CMakePresets altrimenti CMake Tools in VSCode non riesce
+# a farmi fare il Debug e il Run con i comandi integrati
+#set(CMAKE_BUILD_TYPE Release)
+
+# cmake adds automatically this compile option when CMAKE_BUILD_TYPE is Debug
+set(CMAKE_C_FLAGS_DEBUG "-g3")  
+
+# Iniziamo ad aggiungere le opzioni comuni a tutte le build
+target_compile_options(hello PRIVATE -Wmissing-declarations -Wextra -Wall -Wlogical-op -Wjump-misses-init -Wno-missing-field-initializers -Wmaybe-uninitialized -Wuninitialized)
+target_compile_options(hello PRIVATE -std=gnu11)
+# $<CONFIG> rappresenta il valore di CMAKE_BUILD_TYPE. Quindi verrà aggiunto -DDEBUG o -DRELEASE
+target_compile_definitions(hello PRIVATE PRINT_INTRO ${CONFIG} $<CONFIG>)
+# Anche se non si chiama add_include_directories, è possibile usare più volte target_include_directories
+target_include_directories(hello PRIVATE src src/module1)
+
+# Puoi fare controlli e condizioni
+if (${CONFIG} STREQUAL "CONFIG_FULL")
+    message(STATUS "Build mode: FULL")
+elseif (${CONFIG} STREQUAL "CONFIG_LITE")
+    message(STATUS "Build mode: LITE")
+else()
+    message(STATUS "Build mode: STANDARD")
+endif()
+
+if (${TARGET} STREQUAL "simulator")
+    target_sources(hello PRIVATE src/ports/sim/bsp.c)
+    target_link_libraries(hello PRIVATE -lws2_32)
+    target_include_directories(hello PRIVATE src/ports/sim)
+endif()
+if (${TARGET} STREQUAL "device")
+    target_sources(hello PRIVATE src/ports/arm/bsp.c)
+    target_include_directories(hello PRIVATE src/ports/arm)
+    #target_link_libraries(hello PRIVATE -lws2_32)
+endif()
+
+# Creare i preset:
+#  full             # quella in produzione (RELEASE, compilatore arm)
+#  lite             # quella in produzione (RELEASE, compilatore arm)
+#  standard         # quella in produzione (RELEASE, compilatore arm)
+#  full_sim         # simulatore full (mingw, DEBUG)
+#  lite_sim         # simulatore lite (mingw, DEBUG)
+#  standard_sim     # simulatore standard (mingw, DEBUG)
+#  debug            # una compilazione di debug con compilatore arm, capire come impostare full/lite/standard al volo
+# Intellisense
+# Se imposto come terminale di default MSYS2, nel terminale OUTPUT (CMake/Build) le sequenze di colorazione ANSI
+# non vengono gestite correttamente e vedo caratteri un po' strani

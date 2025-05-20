@@ -1,0 +1,116 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 16
+  },
+  "configurePresets": [
+
+    {
+      "name": "arm-hidden",
+      "hidden": true,
+      "description": "Common configuration of arm builds",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/toolchain_atmel_arm.cmake",
+        "CMAKE_BUILD_TYPE": "RELEASE",
+        "CMAKE_C_FLAGS_DEBUG": "-g3",
+        "TARGET": "device"
+      }
+    },
+    {
+      "name": "full",
+      "displayName": "FULL Build",
+      "description": "Build in FULL mode",
+      "inherits": "arm-hidden",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build/full",
+      "cacheVariables": {
+        "CONFIG": "CONFIG_FULL"
+      }
+    },
+    {
+      "name": "lite",
+      "displayName": "LITE Build",
+      "description": "Build in LITE mode",
+      "inherits": "arm-hidden",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build/lite",
+      "cacheVariables": {
+        "CONFIG": "CONFIG_LITE"
+      }
+    },
+    {
+      "name": "standard",
+      "displayName": "STANDARD Build",
+      "description": "Build in STANDARD mode",
+      "generator": "Unix Makefiles",
+      "inherits": "arm-hidden",
+      "binaryDir": "${sourceDir}/build/standard",
+      "cacheVariables": {
+        "CONFIG": "CONFIG_STANDARD"
+      }
+    },
+
+
+    {
+      "name": "sim-hidden",
+      "description": "Build FULL Simulator",
+      "hidden": true,
+      "cacheVariables": {
+        "TARGET": "simulator",
+        "CMAKE_BUILD_TYPE": "DEBUG",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "CMAKE_C_FLAGS_DEBUG": "-g3"
+      }
+    },
+    {
+      "name": "full-sim",
+      "displayName": "FULL Simulator",
+      "description": "Build FULL Simulator",
+      "inherits": "sim-hidden",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build/full-sim",
+      "cacheVariables": {
+        "CONFIG": "CONFIG_FULL"
+      }
+    },
+    {
+      "name": "lite-sim",
+      "displayName": "LITE Simulator",
+      "description": "Build LITE Simulator",
+      "inherits": "sim-hidden",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build/lite-sim",
+      "cacheVariables": {
+        "CONFIG": "CONFIG_LITE"
+      }
+    },
+    {
+      "name": "standard-sim",
+      "displayName": "STANDARD Simulator",
+      "description": "Build STANDARD Simulator",
+      "inherits": "sim-hidden",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build/standard-sim",
+      "cacheVariables": {
+        "CONFIG": "CONFIG_STANDARD"
+      }
+    }
+  ],
+
+  "buildPresets": [
+    {
+      "name": "full",
+      "configurePreset": "full"
+    },
+    {
+      "name": "lite",
+      "configurePreset": "lite"
+    },
+    {
+      "name": "standard",
+      "configurePreset": "standard"
+    }
+  ]
+}
