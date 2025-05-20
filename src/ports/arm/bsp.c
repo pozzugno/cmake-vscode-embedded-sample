@@ -1,17 +1,21 @@
-#include <stdbool.h>
+#include <stdio.h>
+#include <stdint.h>
 #include "bsp.h"
 #include "debug.h"
-
-static bool init = false;
 
 void
 bsp_init(void)
 {
-    init = true;
+    debug_printf("bsp_init()\n");
+}
+
+void
+bsp_task(void)
+{
 }
 
 void
 debug_printf(const char *s)
 {
-    (void)s;
+    printf(s);
 }

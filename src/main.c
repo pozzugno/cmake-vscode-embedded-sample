@@ -33,5 +33,9 @@ main(int argc, char *argv[])
 	debug_printf("Release\n");
 #endif	
 
+	while(1) {
+		bsp_task();
+	}
+
 	return 0;
 }

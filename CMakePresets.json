@@ -6,6 +6,52 @@
   },
   "configurePresets": [
 
+        {
+      "name": "avr-hidden",
+      "hidden": true,
+      "description": "Common configuration of avr builds",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/toolchain_atmel_avr.cmake",
+        "CMAKE_BUILD_TYPE": "RELEASE",
+        "CMAKE_C_FLAGS_DEBUG": "-g3",
+        "TARGET": "avr"
+      }
+    },
+    {
+      "name": "full-avr",
+      "displayName": "FULL (AVR))",
+      "description": "Build FULL product for AVR",
+      "inherits": "avr-hidden",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build/full-avr",
+      "cacheVariables": {
+        "CONFIG": "CONFIG_FULL"
+      }
+    },
+    {
+      "name": "lite-avr",
+      "displayName": "LITE (AVR))",
+      "description": "Build LITE product for AVR",
+      "inherits": "avr-hidden",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build/lite-avr",
+      "cacheVariables": {
+        "CONFIG": "CONFIG_LITE"
+      }
+    },
+    {
+      "name": "standard-avr",
+      "displayName": "STANDARD (AVR)",
+      "description": "Build STANDARD product for AVR",
+      "generator": "Unix Makefiles",
+      "inherits": "avr-hidden",
+      "binaryDir": "${sourceDir}/build/standard-avr",
+      "cacheVariables": {
+        "CONFIG": "CONFIG_STANDARD"
+      }
+    },
+
     {
       "name": "arm-hidden",
       "hidden": true,
@@ -19,34 +65,34 @@
       }
     },
     {
-      "name": "full",
-      "displayName": "FULL Build",
-      "description": "Build in FULL mode",
+      "name": "full-arm",
+      "displayName": "FULL (ARM))",
+      "description": "Build FULL product for ARM",
       "inherits": "arm-hidden",
       "generator": "Unix Makefiles",
-      "binaryDir": "${sourceDir}/build/full",
+      "binaryDir": "${sourceDir}/build/full-arm",
       "cacheVariables": {
         "CONFIG": "CONFIG_FULL"
       }
     },
     {
-      "name": "lite",
-      "displayName": "LITE Build",
-      "description": "Build in LITE mode",
+      "name": "lite-arm",
+      "displayName": "LITE (ARM))",
+      "description": "Build LITE product for ARM",
       "inherits": "arm-hidden",
       "generator": "Unix Makefiles",
-      "binaryDir": "${sourceDir}/build/lite",
+      "binaryDir": "${sourceDir}/build/lite-arm",
       "cacheVariables": {
         "CONFIG": "CONFIG_LITE"
       }
     },
     {
-      "name": "standard",
-      "displayName": "STANDARD Build",
-      "description": "Build in STANDARD mode",
+      "name": "standard-arm",
+      "displayName": "STANDARD (ARM)",
+      "description": "Build STANDARD product for ARM",
       "generator": "Unix Makefiles",
       "inherits": "arm-hidden",
-      "binaryDir": "${sourceDir}/build/standard",
+      "binaryDir": "${sourceDir}/build/standard-arm",
       "cacheVariables": {
         "CONFIG": "CONFIG_STANDARD"
       }
@@ -101,16 +147,16 @@
 
   "buildPresets": [
     {
-      "name": "full",
-      "configurePreset": "full"
+      "name": "full-arm",
+      "configurePreset": "full-arm"
     },
     {
-      "name": "lite",
-      "configurePreset": "lite"
+      "name": "lite-arm",
+      "configurePreset": "lite-arm"
     },
     {
-      "name": "standard",
-      "configurePreset": "standard"
+      "name": "standard-arm",
+      "configurePreset": "standard-arm"
     }
   ]
 }
