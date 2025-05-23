@@ -14,13 +14,19 @@
 #  define PRODUCT_NAME		"LITE"
 #endif
 
+static void
+timer_callback(void)
+{
+	bsp_led_toggle(LED);
+}
+
 int
 main(int argc, char *argv[])
 {
 	(void)argc,
 	(void)argv;
 	debug_printf("\n");
-	bsp_init();
+	bsp_init(timer_callback);
 
 	debug_printf("Starting " PRODUCT_NAME "\n");
 #ifdef PRINT_INTRO

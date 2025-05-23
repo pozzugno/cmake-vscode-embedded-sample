@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(hello C)
 
+
 # Add the executable with common source files
 add_executable(hello src/main.c src/module1/module1.c)
 
@@ -8,12 +9,19 @@ add_executable(hello src/main.c src/module1/module1.c)
 # a farmi fare il Debug e il Run con i comandi integrati
 #set(CMAKE_BUILD_TYPE Release)
 
+# Set this to ON to print command lines during building
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
 # cmake adds automatically this compile option when CMAKE_BUILD_TYPE is Debug
 set(CMAKE_C_FLAGS_DEBUG "-g3")  
 
 # Iniziamo ad aggiungere le opzioni comuni a tutte le build
 target_compile_options(hello PRIVATE -Wmissing-declarations -Wextra -Wall -Wlogical-op -Wjump-misses-init -Wno-missing-field-initializers -Wmaybe-uninitialized -Wuninitialized)
-target_compile_options(hello PRIVATE -std=gnu11)
+target_compile_options(hello PRIVATE -Wundef -pedantic -Wbad-function-cast -Wcast-align -Wcast-qual -Wfloat-equal -Wformat=2 -Wlogical-op -Wmissing-include-dirs)
+target_compile_options(hello PRIVATE -Wmissing-prototypes -Wnested-externs -Wpointer-arith -Wredundant-decls -Wsequence-point -Wshadow -Wstrict-prototypes)
+target_compile_options(hello PRIVATE -Wswitch -Wundef -Wunreachable-code -Wunused-but-set-parameter -Wwrite-strings)
+target_compile_options(hello PRIVATE -std=gnu11 -g3)
+target_compile_options(hello PRIVATE -funsigned-char -funsigned-bitfields)
 # $<CONFIG> rappresenta il valore di CMAKE_BUILD_TYPE. Quindi verrà aggiunto -DDEBUG o -DRELEASE
 target_compile_definitions(hello PRIVATE PRINT_INTRO ${CONFIG} $<CONFIG>)
 # Anche se non si chiama add_include_directories, è possibile usare più volte target_include_directories
@@ -40,12 +48,18 @@ if (${TARGET} STREQUAL "arm")
     #target_link_libraries(hello PRIVATE -lws2_32)
 endif()
 if (${TARGET} STREQUAL "avr")
+    # Add sources specific to avr porting
     target_sources(hello PRIVATE src/ports/avr/bsp.c)
+    # Add include directories specific to avr porting
     target_include_directories(hello PRIVATE src/ports/avr)
-    target_compile_options(hello PRIVATE -mmcu=atmega328p)
-    target_compile_options(hello PRIVATE -B "C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\Packs\\atmel\\ATmega_DFP\\1.2.209\\gcc\\dev\\atmega328p")
+    # Add compile options specific to avr porting
+    target_compile_options(hello PRIVATE -mmcu=atmega328p -Os -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -Waggregate-return)
+    # It seems avr-gcc doesn't need directories (-I and -B options) from packs, even if Atmel Studio adds them, at least for old devices.
+    #target_include_directories(hello PRIVATE "C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\Packs\\atmel\\ATmega_DFP\\1.2.209\\include")
+    #target_compile_options(hello PRIVATE -B "C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\Packs\\atmel\\ATmega_DFP\\1.2.209\\gcc\\dev\\atmega328p")
     target_compile_definitions(hello PRIVATE F_CPU=8000000)
     #target_link_libraries(hello PRIVATE -lws2_32)
+    target_link_options(hello PRIVATE -mmcu=atmega328p -Os)
 endif()
 
 # Creare i preset:
